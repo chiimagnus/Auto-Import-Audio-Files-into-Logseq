@@ -1,7 +1,21 @@
 import "@logseq/libs";
+import { setup as l10nSetup, t } from "logseq-l10n";
+import zhCN from "./translations/zh-CN.json" assert { type: "json" };
+import en from "./translations/en.json" assert { type: "json" };
 
 async function main() {
-  console.log("plugin loaded");
+  // 将初始化移到最前面
+  try {
+    await l10nSetup({ 
+      builtinTranslations: { 
+        en, 
+        zhCN, // 注意这里要使用正确的语言代码
+        'zh-CN': zhCN // 添加备用键（Logseq使用zh-CN作为中文代码）
+      } 
+    });
+  } finally {
+    console.log("plugin loaded");
+  }
 
   // 确保 root 元素存在
   if (!document.getElementById("root")) {
@@ -14,11 +28,11 @@ async function main() {
   const registerCommands = () => {
     // 注册斜杠命令
     logseq.Editor.registerSlashCommand(
-      "Convert to Embed",
+      t("Convert to Embed"),
       async () => {
         const blocks = await logseq.Editor.getSelectedBlocks();
         if (!blocks?.length) {
-          (logseq.App as any).showMsg("请先选择多个块", "warning");
+          logseq.UI.showMsg(t("Please select multiple blocks first"), "warning");
           return;
         }
         
@@ -34,7 +48,7 @@ async function main() {
     // 注册快捷键
     logseq.App.registerCommandPalette({
       key: "convert-path",
-      label: "Convert Path to Embed",
+      label: t("Convert Path to Embed"),
       keybinding: {
         mode: "global",
         binding: "mod+shift+i"
@@ -43,7 +57,7 @@ async function main() {
       try {
         const blocks = await logseq.Editor.getSelectedBlocks();
         if (!blocks?.length) {
-          (logseq.App as any).showMsg("请先选择多个块", "warning");
+          logseq.UI.showMsg(t("Please select multiple blocks first"), "warning");
           return;
         }
         
@@ -55,10 +69,8 @@ async function main() {
         );
       } catch (error) {
         console.error(error);
-        (logseq.App as any).showMsg(
-          (error as Error).message?.includes("文件路径") ?? false
-            ? "内容不是有效的文件路径" 
-            : "转换失败，请检查控制台",
+        logseq.UI.showMsg(
+          (error as Error).message,
           "error"
         );
       }
@@ -87,7 +99,7 @@ function isAlreadyEmbed(content: string) {
 // 在转换函数中添加校验
 function convertToEmbed(content: string) {
   if (!isValidPath(content)) {
-    throw new Error("内容不是有效的文件路径");
+    throw new Error(t("Content is not a valid file path"));
   }
   return isAlreadyEmbed(content) ? content : `![](${content})`;
 }
