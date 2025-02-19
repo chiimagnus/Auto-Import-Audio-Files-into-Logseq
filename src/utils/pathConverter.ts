@@ -13,12 +13,32 @@ function isAlreadyEmbed(content: string) {
   return embedPattern.test(content);
 }
 
-// 在转换函数中添加校验
+// 处理单个路径
 function convertToEmbed(content: string) {
   if (!isValidPath(content)) {
     throw new Error(t("Content is not a valid file path"));
   }
   return isAlreadyEmbed(content) ? content : `![](${content})`;
+}
+
+// 新增：处理多行内容
+function convertMultiplePathsToEmbed(content: string): string {
+  // 按换行符分割内容
+  const lines = content.split('\n');
+  
+  // 处理每一行
+  return lines.map(line => {
+    // 跳过空行
+    if (!line.trim()) return line;
+    
+    try {
+      // 尝试转换每一行
+      return convertToEmbed(line.trim());
+    } catch (error) {
+      // 如果某一行不是有效路径，保持原样
+      return line;
+    }
+  }).join('\n'); // 重新用换行符连接
 }
 
 export const registerPathConverterCommands = () => {
@@ -34,7 +54,8 @@ export const registerPathConverterCommands = () => {
       
       await Promise.all(
         blocks.map(async (block) => {
-          const newContent = convertToEmbed(block.content);
+          // 使用新的多行处理函数
+          const newContent = convertMultiplePathsToEmbed(block.content);
           await logseq.Editor.updateBlock(block.uuid, newContent);
         })
       );
@@ -59,7 +80,8 @@ export const registerPathConverterCommands = () => {
       
       await Promise.all(
         blocks.map(async (block) => {
-          const newContent = convertToEmbed(block.content);
+          // 使用新的多行处理函数
+          const newContent = convertMultiplePathsToEmbed(block.content);
           await logseq.Editor.updateBlock(block.uuid, newContent);
         })
       );
