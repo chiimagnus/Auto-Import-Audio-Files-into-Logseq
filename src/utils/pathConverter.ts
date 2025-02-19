@@ -1,4 +1,5 @@
 import { t } from "logseq-l10n";
+import { generateEmbed } from './pathUtils';
 
 // 增强路径检测逻辑
 function isValidPath(content: string) {
@@ -15,11 +16,11 @@ function isAlreadyEmbed(content: string) {
 
 // 处理单个路径
 function convertToEmbed(content: string) {
-  if (!isValidPath(content)) {
-    throw new Error(t("Content is not a valid file path"));
+    if (!isValidPath(content)) {
+      throw new Error(t("Content is not a valid file path"));
+    }
+    return isAlreadyEmbed(content) ? content : generateEmbed(content);
   }
-  return isAlreadyEmbed(content) ? content : `![](${content})`;
-}
 
 // 新增：处理多行内容
 function convertMultiplePathsToEmbed(content: string): string {

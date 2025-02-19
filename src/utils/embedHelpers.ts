@@ -1,4 +1,5 @@
 import { t } from "logseq-l10n";
+import { generateEmbed } from './pathUtils';
 
 export const registerFileCommands = () => {
   // 注册斜杠命令 - 保持英文
@@ -56,7 +57,7 @@ async function handleFiles(files: FileList, uuid: string) {
       if (path) {
         await logseq.Editor.updateBlock(
           uuid,
-          `![](${path})`
+          generateEmbed(path)
         );
       }
     }
@@ -68,10 +69,10 @@ async function handleFiles(files: FileList, uuid: string) {
       if (path) {
         await logseq.Editor.insertBlock(
           currentBlock.uuid,
-          `![](${path})`,
+          generateEmbed(path),
           {
-            sibling: true,  // 作为同级块插入
-            before: false   // 在当前块之后
+            sibling: true,
+            before: false
           }
         );
       }
