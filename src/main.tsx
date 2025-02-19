@@ -27,9 +27,9 @@ async function main() {
 
   // 将命令注册移到 ready 回调中
   const registerCommands = () => {
-    // 注册斜杠命令
+    // 注册斜杠命令 - 保持英文
     logseq.Editor.registerSlashCommand(
-      t("Convert to Embed"),
+      "Convert to Embed", // 不使用 t()，保持英文
       async () => {
         const blocks = await logseq.Editor.getSelectedBlocks();
         if (!blocks?.length) {
@@ -46,10 +46,10 @@ async function main() {
       }
     );
 
-    // 注册快捷键
+    // 注册快捷键 - label 使用翻译
     logseq.App.registerCommandPalette({
       key: "convert-path",
-      label: t("Convert Path to Embed"),
+      label: t("Convert Path to Embed"), // 命令面板中的显示可以使用翻译
       keybinding: {
         mode: "non-editing",
         binding: "mod+shift+i"

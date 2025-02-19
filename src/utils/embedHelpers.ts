@@ -1,9 +1,9 @@
 import { t } from "logseq-l10n";
 
 export const registerFileCommands = () => {
-  // 注册斜杠命令
+  // 注册斜杠命令 - 保持英文
   logseq.Editor.registerSlashCommand(
-    "📂 Insert multiple files from local folder",
+    "📂 Insert multiple files from local folder", // 不使用 t()，保持英文
     async ({ uuid }) => {
       const input = document.createElement('input');
       input.type = 'file';
@@ -17,10 +17,10 @@ export const registerFileCommands = () => {
     }
   );
 
-  // 注册快捷键
+  // 注册快捷键 - label 使用翻译
   logseq.App.registerCommandPalette({
     key: "insert-local-files",
-    label: t("Insert multiple files from local folder"),
+    label: t("Insert multiple files from local folder"), // 命令面板中的显示可以使用翻译
     keybinding: {
       mode: "global",
       binding: "shift+alt+i"
