@@ -42,3 +42,7 @@ C:\Documents\file.txt
 
 file_with_extension.md
 ```
+
+## 致谢
+
+感谢 [logseq-plugin-multiple-assets](https://github.com/YU000jp/logseq-plugin-multiple-assets) 插件的作者，提供了多文件插入的思路。
