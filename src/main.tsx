@@ -2,6 +2,7 @@ import "@logseq/libs";
 import { setup as l10nSetup, t } from "logseq-l10n";
 import zhCN from "./translations/zh-CN.json" assert { type: "json" };
 import en from "./translations/en.json" assert { type: "json" };
+import { registerFileCommands } from './utils/embedHelpers';
 
 async function main() {
   // 将初始化移到最前面
@@ -76,6 +77,8 @@ async function main() {
       }
     });
 
+    registerFileCommands(); // 添加新命令注册
+    
     return () => {/* 清理函数 */};
   };
 

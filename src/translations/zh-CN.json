@@ -3,5 +3,8 @@
   "Convert Path to Embed": "转换路径为嵌入",
   "Please select multiple blocks first": "请先选择多个块",
   "Content is not a valid file path": "内容不是有效的文件路径",
-  "Conversion failed, please check console": "转换失败，请检查控制台"
+  "Conversion failed, please check console": "转换失败，请检查控制台",
+  "Insert multiple files from local folder": "从本地文件夹插入多个文件",
+  "File saved to assets": "文件已保存至资源库",
+  "Error writing file": "文件写入错误"
 }
