@@ -50,7 +50,7 @@ async function main() {
       key: "convert-path",
       label: t("Convert Path to Embed"),
       keybinding: {
-        mode: "global",
+        mode: "non-editing",
         binding: "mod+shift+i"
       }
     }, async () => {
