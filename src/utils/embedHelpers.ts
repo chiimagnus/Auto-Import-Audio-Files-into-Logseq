@@ -22,7 +22,7 @@ export const registerFileCommands = () => {
     key: "insert-local-files",
     label: t("Insert multiple files from local folder"),
     keybinding: {
-      mode: "editing",
+      mode: "global",
       binding: "shift+alt+i"
     }
   }, async () => {
