@@ -2,6 +2,7 @@ import "@logseq/libs";
 import { setup as l10nSetup, t } from "logseq-l10n";
 import zhCN from "./translations/zh-CN.json" assert { type: "json" };
 import en from "./translations/en.json" assert { type: "json" };
+import ja from "./translations/ja.json" assert { type: "json" };
 import { registerFileCommands } from './utils/embedHelpers';
 import { registerPathConverterCommands } from './utils/pathConverter';
 import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin";
@@ -24,7 +25,8 @@ async function main() {
       builtinTranslations: { 
         en, 
         zhCN,
-        'zh-CN': zhCN
+        'zh-CN': zhCN,
+        ja
       } 
     });
   } finally {

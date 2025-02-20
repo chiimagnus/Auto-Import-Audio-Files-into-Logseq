@@ -1,0 +1,12 @@
+{
+  "Convert to Embed": "埋め込みに変換",
+  "Convert Path to Embed": "パスを埋め込みに変換",
+  "Please select multiple blocks first": "先にブロックを選択してください",
+  "Content is not a valid file path": "有効なファイルパスではありません",
+  "Conversion failed, please check console": "変換に失敗しました。コンソールを確認してください",
+  "Insert multiple files from local folder": "ローカルフォルダから複数のファイルを挿入",
+  "File saved to assets": "アセットに保存されました",
+  "Error writing file": "ファイルの書き込みエラー",
+  "Split Multiple Paths into Separate Blocks": "複数のパスを別々のブロックに分割",
+  "Split paths description": "1つのブロック内の複数のファイルパスを別々のブロックに分割するかどうか"
+} 
