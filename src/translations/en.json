@@ -6,5 +6,7 @@
   "Conversion failed, please check console": "Conversion failed, please check console",
   "Insert multiple files from local folder": "Insert multiple files from local folder",
   "File saved to assets": "File saved to assets",
-  "Error writing file": "Error writing file"
+  "Error writing file": "Error writing file",
+  "Split Multiple Paths into Separate Blocks": "Split Multiple Paths into Separate Blocks",
+  "Split paths description": "Whether to split multiple file paths in a block into separate blocks"
 }
