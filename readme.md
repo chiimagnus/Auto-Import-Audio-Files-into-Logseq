@@ -1,5 +1,7 @@
 # File Path Transformer
 
+[中文](./readme.md) | [English](./readme.en.md) | [日本語](./readme.ja.md)
+
 这是一个 Logseq 插件，提供两个主要功能：
 1. 将文件路径转换为 Logseq 的嵌入语法
 2. 快速从本地文件夹选择并插入多个文件
