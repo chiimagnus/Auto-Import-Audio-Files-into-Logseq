@@ -3,8 +3,10 @@ import { generateEmbed } from './pathUtils';
 
 // 增强路径检测逻辑
 function isValidPath(content: string) {
+  // 清理路径中的引号
+  const cleanedContent = cleanPath(content);
   const pathPattern = /^(?:[a-zA-Z]:\\|\\|\\\\|\/|\.\/|~\/)|.*\.[a-zA-Z0-9]{2,4}(?:[?#].*)?$/;
-  return pathPattern.test(content) && (content.includes("/") || content.includes("\\"));
+  return pathPattern.test(cleanedContent) && (cleanedContent.includes("/") || cleanedContent.includes("\\"));
 }
 
 // 添加格式检测函数
@@ -22,24 +24,53 @@ function convertToEmbed(content: string) {
     return isAlreadyEmbed(content) ? content : generateEmbed(content);
   }
 
-// 新增：处理多行内容
+// 新增：处理带引号的路径
+function cleanPath(path: string): string {
+  // 移除开头和结尾的单引号
+  return path.replace(/^'|'$/g, '').trim();
+}
+
+// 新增：处理空格分隔的多个路径
+function handleSpaceSeparatedPaths(content: string): string {
+  // 使用正则表达式匹配带引号的路径
+  const pathRegex = /'[^']+'/g;
+  const paths = content.match(pathRegex);
+  
+  if (paths) {
+    // 处理每个匹配到的路径
+    return paths.map(path => {
+      const cleanedPath = cleanPath(path);
+      try {
+        return convertToEmbed(cleanedPath);
+      } catch (error) {
+        return path;
+      }
+    }).join('\n');
+  }
+  
+  // 如果没有匹配到带引号的路径，尝试作为单个路径处理
+  return content;
+}
+
+// 修改：更新多行处理函数
 function convertMultiplePathsToEmbed(content: string): string {
-  // 按换行符分割内容
+  // 首先尝试处理空格分隔的路径
+  if (content.includes("'")) {
+    return handleSpaceSeparatedPaths(content);
+  }
+
+  // 如果不包含引号，按原来的方式处理
   const lines = content.split('\n');
   
-  // 处理每一行
   return lines.map(line => {
-    // 跳过空行
     if (!line.trim()) return line;
     
     try {
-      // 尝试转换每一行
       return convertToEmbed(line.trim());
     } catch (error) {
-      // 如果某一行不是有效路径，保持原样
       return line;
     }
-  }).join('\n'); // 重新用换行符连接
+  }).join('\n');
 }
 
 export const registerPathConverterCommands = () => {
