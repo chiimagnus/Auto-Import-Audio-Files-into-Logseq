@@ -52,6 +52,49 @@ function handleSpaceSeparatedPaths(content: string): string {
   return content;
 }
 
+// 修改：更新多行处理函数，添加分块处理功能
+async function processBlock(block: any, content: string) {
+  const shouldSplit = logseq.settings?.splitPathsIntoBlocks;
+  const newContent = convertMultiplePathsToEmbed(content);
+  
+  if (shouldSplit && content.includes("'")) {
+    // 处理带引号的多个路径
+    const pathRegex = /'[^']+'/g;
+    const paths = content.match(pathRegex);
+    
+    if (paths && paths.length > 1) {
+      // 更新当前块的内容为第一个路径
+      const firstPath = paths[0];
+      const firstPathConverted = convertToEmbed(cleanPath(firstPath));
+      await logseq.Editor.updateBlock(block.uuid, firstPathConverted);
+      
+      // 为其余路径创建新块
+      for (let i = 1; i < paths.length; i++) {
+        const path = paths[i];
+        const convertedPath = convertToEmbed(cleanPath(path));
+        await logseq.Editor.insertBlock(block.uuid, convertedPath, { sibling: true });
+      }
+      return;
+    }
+  } else if (shouldSplit && newContent.includes('\n')) {
+    // 处理换行符分隔的多个路径
+    const lines = newContent.split('\n').filter(line => line.trim());
+    if (lines.length > 1) {
+      // 更新当前块的内容为第一行
+      await logseq.Editor.updateBlock(block.uuid, lines[0]);
+      
+      // 为其余行创建新块
+      for (let i = 1; i < lines.length; i++) {
+        await logseq.Editor.insertBlock(block.uuid, lines[i], { sibling: true });
+      }
+      return;
+    }
+  }
+  
+  // 如果不需要分块或只有一个路径，直接更新当前块
+  await logseq.Editor.updateBlock(block.uuid, newContent);
+}
+
 // 修改：更新多行处理函数
 function convertMultiplePathsToEmbed(content: string): string {
   // 首先尝试处理空格分隔的路径
@@ -86,9 +129,7 @@ export const registerPathConverterCommands = () => {
       
       await Promise.all(
         blocks.map(async (block) => {
-          // 使用新的多行处理函数
-          const newContent = convertMultiplePathsToEmbed(block.content);
-          await logseq.Editor.updateBlock(block.uuid, newContent);
+          await processBlock(block, block.content);
         })
       );
     }
@@ -112,9 +153,7 @@ export const registerPathConverterCommands = () => {
       
       await Promise.all(
         blocks.map(async (block) => {
-          // 使用新的多行处理函数
-          const newContent = convertMultiplePathsToEmbed(block.content);
-          await logseq.Editor.updateBlock(block.uuid, newContent);
+          await processBlock(block, block.content);
         })
       );
     } catch (error) {
